@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Dzidza Shona</title>
+<meta name="description" content="Learn Shona, Zimbabwe's most spoken language, a few minutes a day.">
+<meta name="theme-color" content="#ffc72c">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-title" content="Dzidza Shona">
+<link rel="manifest" href="manifest.json">
+<link rel="icon" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-192.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Nunito:wght@500;700;800;900&display=swap" rel="stylesheet">
+<style>
+/* VOICE: playful, encouraging, made for friends
+   IDEA: a lesson path climbing the chevron walls of Great Zimbabwe
+   PICTURE: chevron stonework band + winding path of round lesson stones
+   COLOUR and TYPE: Zimbabwe sun yellow, flag red, ink black; Nunito rounded
+   LAYOUT: one centred column, 560px, phone first */
+:root{color-scheme:light;--bg:light-dark(#ffffff,#141414);--ink:light-dark(#1b1b1b,#f3f1ea);--soft:light-dark(#f2f0ea,#232321);--line:light-dark(#e3e0d8,#34332f);--mute:light-dark(#6b6860,#a9a59a);--sun:#ffc72c;--red:#d62828;--ok:#2e9e44;--okbg:light-dark(#e4f6e6,#173a1d);--badbg:light-dark(#fde6e6,#3d1717)}
+:root[data-theme=light]{color-scheme:light}:root[data-theme=dark]{color-scheme:dark}
+*{box-sizing:border-box;min-width:0}
+body{margin:0;background:var(--bg);color:var(--ink);font:500 16px/1.5 Nunito,system-ui,sans-serif;overflow-x:clip}
+button{font:inherit;color:inherit;cursor:pointer}
+button:focus-visible,input:focus-visible{outline:3px solid #1f6feb;outline-offset:2px}
+.wrap{max-width:560px;margin:0 auto;padding:0 16px}
+.top{position:sticky;top:0;z-index:5;background:var(--bg);border-bottom:2px solid var(--line)}
+.top .wrap{display:flex;gap:14px;align-items:center;height:52px}
+.top .brand{font-size:17px}
+.me{width:38px;height:38px;border-radius:50%;border:2px solid #1b1b1b;background:var(--sun);font-weight:900;color:#1b1b1b;flex:none;padding:0}
+.lvs{color:#1f6feb}
+.chev{display:block;width:100%;height:10px}
+.brand{font-weight:900;font-size:20px;margin-right:auto}
+.stat{display:flex;gap:6px;align-items:center;font-weight:800}
+.stat svg{width:22px;height:22px}
+.hero{background:var(--sun);color:#1b1b1b}
+.hero .wrap{padding-top:22px;padding-bottom:26px}
+.hero h1{font-size:clamp(32px,8vw,46px);line-height:1.05;margin:0 0 6px;font-weight:900;text-wrap:balance}
+.hero p{margin:0 0 16px;font-weight:700}
+.goal{background:var(--bg);border-radius:16px;padding:14px 16px;border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink)}
+.goal b{display:flex;justify-content:space-between}
+.bar{height:16px;background:#ece9df;border-radius:99px;overflow:hidden;margin-top:8px}
+.bar i{display:block;height:100%;background:var(--red);border-radius:99px;transition:width .4s}
+.unit{margin:26px 0 8px;border-radius:18px;padding:14px 16px;display:flex;gap:12px;align-items:center}
+.unit h2{margin:0;font-size:21px;line-height:1.15}
+.unit small{display:block;font-weight:700;opacity:.85}
+.unit div{flex:1}
+.tipb{border:2px solid currentColor;background:transparent;border-radius:12px;padding:8px 12px;font-weight:800;min-height:44px}
+.tip{background:var(--soft);border-radius:14px;padding:12px 16px;margin:0 0 6px;font-size:15px}
+.usec{padding-bottom:10px}
+.unit{position:sticky;top:66px;z-index:4}
+.path{display:flex;flex-direction:column;align-items:center;gap:22px;padding:22px 0 14px}
+.nwrap{position:relative;display:flex;flex-direction:column;align-items:center;gap:4px}
+.nlab{font-size:13px;font-weight:800;color:var(--mute)}
+.start{position:absolute;top:-34px;background:var(--bg);color:var(--ink);border:2px solid var(--line);border-radius:10px;padding:2px 10px;font-weight:900;font-size:14px;animation:bob 1.6s infinite;z-index:2}
+@keyframes bob{50%{transform:translateY(-4px)}}
+.node{width:84px;height:76px;border-radius:50%;border:0;position:relative;background:var(--c);box-shadow:0 8px 0 var(--d);transition:transform .1s;display:grid;place-items:center}
+.node.cur{outline:6px solid light-dark(#e3e0d8,#34332f);outline-offset:6px}
+.node.chest{box-shadow:none;width:90px}
+.node.chest svg{width:64px;height:64px}
+.node:active{transform:translateY(5px);box-shadow:0 3px 0 var(--d)}
+.node.locked{background:var(--line);color:var(--mute);cursor:not-allowed;box-shadow:0 8px 0 light-dark(#cfcbc0,#262522)}
+.node.done::after{content:"";position:absolute;right:-4px;top:-4px;width:24px;height:24px;border-radius:50%;background:var(--ok) url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M6 12l4 4 8-8' stroke='white' stroke-width='3' fill='none' stroke-linecap='round'/%3E%3C/svg%3E") center/18px no-repeat;border:3px solid var(--bg)}
+.foot{color:var(--mute);font-size:13px;text-align:center;padding:30px 0 40px}
+/* lesson */
+#lesson,#end{min-height:100vh;display:flex;flex-direction:column}
+.lt{display:flex;gap:14px;align-items:center;padding:16px 0}
+.x{border:0;background:none;font-size:28px;line-height:1;color:var(--mute);width:44px;height:44px}
+.lt .bar{flex:1;margin:0;background:var(--soft)}
+.lt .bar i{background:var(--ok)}
+.q{flex:1;padding:8px 0 24px}
+.q h3{font-size:24px;line-height:1.2;margin:10px 0 22px}
+.q h3 b{color:var(--red)}
+.opts{display:grid;gap:12px}
+.opt,.tok,.mbtn{border:2px solid var(--line);background:var(--bg);border-radius:14px;padding:12px 16px;font-weight:800;font-size:18px;box-shadow:0 4px 0 var(--line);min-height:52px;text-align:left}
+.opt.sel,.mbtn.sel{border-color:#1f6feb;background:light-dark(#e8f1ff,#14243d);box-shadow:0 4px 0 #1f6feb}
+.ans{min-height:64px;border-bottom:2px solid var(--line);display:flex;flex-wrap:wrap;gap:8px;padding:8px 0;margin-bottom:22px}
+.bank{display:flex;flex-wrap:wrap;gap:8px;justify-content:center}
+.tok{font-size:17px;padding:8px 14px;min-height:44px}
+.tok.used{visibility:hidden}
+.typ{width:100%;font:700 18px Nunito,sans-serif;padding:14px;border:2px solid var(--line);border-radius:14px;background:var(--soft);color:var(--ink)}
+.match{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:12px}
+.match div{display:grid;gap:12px}
+.mbtn{text-align:center;font-size:16px}
+.mbtn.gone{opacity:.25;pointer-events:none;box-shadow:none}
+.mbtn.wrong{border-color:var(--red);animation:sh .3s}
+@keyframes sh{25%{transform:translateX(-5px)}75%{transform:translateX(5px)}}
+footer{border-top:2px solid var(--line);padding:16px 0 22px;position:sticky;bottom:0;background:var(--bg)}
+footer.ok{background:var(--okbg);border-color:transparent}
+footer.bad{background:var(--badbg);border-color:transparent}
+#fb{font-weight:800;font-size:18px;margin-bottom:12px}
+footer.ok #fb{color:var(--ok)}footer.bad #fb{color:var(--red)}
+#fb span{display:block;font-weight:700;font-size:16px;color:var(--ink)}
+.big{width:100%;border:0;border-radius:16px;padding:14px;font-weight:900;font-size:18px;background:var(--ok);color:#fff;box-shadow:0 5px 0 #1f6e2f;min-height:52px}
+.big:disabled{background:var(--line);color:var(--mute);box-shadow:0 5px 0 var(--soft);cursor:default}
+footer.bad .big{background:var(--red);box-shadow:0 5px 0 #8f1a1a}
+.endc{flex:1;display:flex;flex-direction:column;justify-content:center;text-align:center;gap:18px;padding:30px 0}
+.endc h2{font-size:clamp(32px,8vw,44px);line-height:1.05;margin:0}
+.cards{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.card{border:2px solid var(--line);border-radius:16px;padding:14px}
+.card b{display:block;font-size:28px;font-weight:900}
+dialog{border:0;border-radius:20px;padding:24px;max-width:360px;width:calc(100% - 32px);background:var(--bg);color:var(--ink)}
+dialog::backdrop{background:rgba(0,0,0,.55)}
+dialog h2{margin:0 0 8px}
+.qh{display:flex;gap:10px;align-items:flex-start;justify-content:space-between}
+.hint{flex:none;border:2px solid var(--sun);background:light-dark(#fff8e1,#2e2712);border-radius:12px;padding:6px 12px;font-weight:800;min-height:44px;margin-top:8px}
+.hint:disabled{opacity:.4;cursor:default}
+.clue{background:light-dark(#fff8e1,#2e2712);border-radius:12px;padding:8px 12px;margin:-10px 0 16px;font-weight:700;font-size:15px}
+.opt.out{opacity:.3;pointer-events:none;text-decoration:line-through}
+.glow{border-color:var(--sun)!important;box-shadow:0 4px 0 #c99700!important;animation:pl 1s 2}
+@keyframes pl{50%{transform:scale(1.07)}}
+.hw{border-bottom:2px dotted currentColor;cursor:help;position:relative}
+.hw.on::after{content:attr(data-h);position:absolute;left:50%;top:calc(100% + 6px);transform:translateX(-50%);background:var(--ink);color:var(--bg);font-size:14px;font-weight:700;padding:5px 10px;border-radius:8px;width:max-content;max-width:220px;white-space:normal;text-align:center;z-index:3}
+.learn{display:grid;gap:10px}
+.lc{border:2px solid var(--line);border-radius:14px;padding:10px 14px;display:flex;justify-content:space-between;gap:12px;align-items:baseline;flex-wrap:wrap}
+.lc b{font-size:20px}.lc span{color:var(--mute);font-weight:700}
+.seg{display:flex;gap:6px;margin-top:12px;flex-wrap:wrap;align-items:center;font-weight:800;font-size:14px}
+.seg button{border:2px solid #1b1b1b;background:transparent;border-radius:99px;padding:6px 12px;min-height:40px;font-weight:800;color:#1b1b1b}
+.seg button.on{background:#1b1b1b;color:var(--sun)}
+.small{font-size:13px;color:var(--mute);margin:-12px 0 16px}
+.lv{background:var(--bg);border-radius:16px;padding:14px 16px;border:2px solid var(--ink);box-shadow:0 4px 0 var(--ink);margin-top:14px;display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.lv>div{flex:1 1 200px}.lv b{font-size:20px}.lv small{display:block;color:var(--mute);font-weight:700}
+.lv .bar i{background:#1f6feb}
+.sbtn{border:2px solid #1b1b1b;background:var(--sun);border-radius:12px;padding:8px 14px;font-weight:900;min-height:44px;color:#1b1b1b}
+#shareTxt{width:100%;margin-top:8px;font:600 14px Nunito,sans-serif;padding:8px;border-radius:10px;border:2px solid #1b1b1b}
+.lvup{font-weight:900;font-size:20px;color:#1f6feb;margin:0}
+#toast{position:fixed;left:50%;bottom:24px;transform:translateX(-50%);background:var(--ink);color:var(--bg);padding:10px 18px;border-radius:12px;font-weight:800;z-index:20;max-width:calc(100% - 32px);text-align:center}
+.drawer{position:fixed;inset:0;z-index:30}
+.dback{position:absolute;inset:0;background:rgba(0,0,0,.45)}
+.dpanel{position:absolute;inset:0 auto 0 0;width:min(360px,88vw);background:var(--bg);color:var(--ink);overflow-y:auto;padding:16px 18px 30px;box-shadow:4px 0 24px rgba(0,0,0,.25);animation:slide .22s ease-out}
+@keyframes slide{from{transform:translateX(-100%)}}
+.dhead{display:flex;justify-content:space-between;align-items:center}
+.dhead h1{font-size:30px;line-height:1.1;margin:6px 0;font-weight:900}
+.dsub{margin:0 0 14px;color:var(--mute);font-weight:700}
+.dh{font-size:15px;margin:20px 0 4px}
+.dpanel .goal{margin-top:12px}
+.dpanel .seg button{border-color:var(--ink);color:var(--ink)}
+.dpanel .seg button.on{background:var(--ink);color:var(--bg)}
+.dpanel .seg{margin-top:6px}
+.ren{display:flex;gap:8px}.ren .typ{padding:10px}
+.dpanel .foot{padding:24px 0 0;text-align:left}
+.node.locked{color:light-dark(#b9b4a7,#55524b)!important}
+.node.locked svg{width:50px;height:50px}
+@media (prefers-reduced-motion:reduce){*{animation:none!important;transition:none!important}}
+[hidden]{display:none!important}
+:root{color-scheme:light dark}
+:root[data-mode=light]{color-scheme:light}:root[data-mode=dark]{color-scheme:dark}
+.top{position:sticky;top:0;z-index:6;background:var(--bg);border-bottom:2px solid var(--line)}
+.top .wrap{display:flex;gap:16px;align-items:center;height:52px}
+.top .brand{font-size:17px;font-weight:900;margin-right:auto;display:flex;align-items:center;gap:8px}
+.top .brand i{width:22px;height:16px;border-radius:4px;background:linear-gradient(#2e9e44 0 25%,#ffc72c 25% 50%,#d62828 50% 75%,#1b1b1b 75%);display:inline-block}
+.view{padding-bottom:96px}
+.unit{position:sticky;top:60px;z-index:4;margin:18px 0 6px}
+.sec{margin:28px 0 0;display:flex;align-items:center;gap:12px;color:var(--mute);font-weight:900;font-size:15px}
+.sec::before,.sec::after{content:"";flex:1;height:2px;background:var(--line)}
+nav.bn{position:fixed;left:0;right:0;bottom:0;z-index:8;background:var(--bg);border-top:2px solid var(--line);display:flex;justify-content:center;gap:8px;padding:8px 8px calc(8px + env(safe-area-inset-bottom))}
+nav.bn button{flex:0 1 140px;border:2px solid transparent;background:none;border-radius:14px;min-height:52px;display:flex;flex-direction:column;align-items:center;justify-content:center;font-weight:800;font-size:13px;color:var(--mute)}
+nav.bn button.on{border-color:#7fb6ff;background:light-dark(#e8f1ff,#14243d);color:var(--ink)}
+nav.bn svg{width:24px;height:24px}
+.pf h1{font-size:32px;line-height:1.05;margin:18px 0 4px}
+.pf .card2{border:2px solid var(--line);border-radius:18px;padding:16px;margin-top:14px}
+.pf .card2 h3{margin:0 0 8px;font-size:18px}
+.lv2 b{font-size:22px}.lv2 small{display:block;color:var(--mute);font-weight:700}
+.lv2 .bar{background:var(--soft)}.lv2 .bar i{background:#1f6feb}
+.goal2 .bar{background:var(--soft)}
+.seg2{display:flex;gap:8px;flex-wrap:wrap}
+.seg2 button{border:2px solid var(--line);background:var(--bg);border-radius:99px;padding:8px 14px;min-height:44px;font-weight:800}
+.seg2 button.on{background:var(--ink);color:var(--bg);border-color:var(--ink)}
+.sbtn{border:2px solid #1b1b1b;background:var(--sun);border-radius:12px;padding:10px 16px;font-weight:900;min-height:44px;color:#1b1b1b;margin-top:12px}
+#shareTxt{width:100%;margin-top:8px;font:600 14px Nunito,sans-serif;padding:8px;border-radius:10px;border:2px solid var(--line);background:var(--soft);color:var(--ink)}
+.namerow{display:flex;gap:8px}.namerow .typ{flex:1}.namerow button{border:2px solid var(--line);background:var(--bg);border-radius:12px;font-weight:800;padding:0 14px;min-height:44px}
+.opt{text-align:left;line-height:1.3}
+</style>
+</head>
+<body>
+<svg width="0" height="0" style="position:absolute"><defs>
+<symbol id="flame" viewBox="0 0 24 24"><path d="M12 2c1 4 6 6 6 12a6 6 0 0 1-12 0c0-3 2-5 3-6 0 2 1 3 2 3 0-4-1-6 1-9z" fill="#ff8a00"/><path d="M12 13c2 2 3 3 3 5a3 3 0 0 1-6 0c0-2 1-3 3-5z" fill="#ffc72c"/></symbol>
+<symbol id="heart" viewBox="0 0 24 24"><path d="M12 21s-8-5-8-11a4.5 4.5 0 0 1 8-2.8A4.5 4.5 0 0 1 20 10c0 6-8 11-8 11z" fill="#d62828"/></symbol>
+<symbol id="gem" viewBox="0 0 24 24"><path d="M6 3h12l4 6-10 12L2 9z" fill="#1f6feb"/><path d="M2 9h20M8 3l4 18 4-18" stroke="#fff" stroke-opacity=".5" fill="none"/></symbol>
+</defs></svg>
+<div class="top"><div class="wrap">
+  <span class="brand"><i aria-hidden="true"></i>Dzidza Shona</span>
+  <span class="stat" title="Day streak"><svg><use href="#flame"/></svg><span id="sStreak">0</span></span>
+  <span class="stat" title="Level" style="color:#1f6feb" id="sLv">Lv 1</span>
+  <span class="stat" title="Total XP"><svg><use href="#gem"/></svg><span id="sXp">0</span></span>
+</div></div>
+
+<section id="home" class="view"><div class="wrap" id="path"></div>
+  <p class="foot wrap">Standard Shona (Zezuru-style spelling). Progress is saved on this device.</p>
+</section>
+
+<section id="profile" class="view pf" hidden><div class="wrap">
+  <h1 id="hello">Mhoro!</h1>
+  <p style="margin:0;color:var(--mute);font-weight:700">Learn Shona a few minutes a day.</p>
+  <div class="card2 lv2"><b id="lvTxt">Level 1</b><small id="lvSub"></small><div class="bar"><i id="lvBar" style="width:0"></i></div>
+    <button class="sbtn" id="share">Share my level</button><textarea id="shareTxt" rows="3" hidden readonly></textarea></div>
+  <div class="card2 goal2"><b style="display:flex;justify-content:space-between"><span>Daily goal</span><span id="gTxt">0 / 20 XP</span></b><div class="bar"><i id="gBar" style="width:0"></i></div></div>
+  <div class="card2"><h3>Questions</h3><div class="seg2" id="seg"><button data-m="en">English → Shona</button><button data-m="mix">Mixed</button></div></div>
+  <div class="card2"><h3>Appearance</h3><div class="seg2" id="theme"><button data-t="light">Light</button><button data-t="dark">Dark</button><button data-t="auto">Match my phone</button></div></div>
+  <div class="card2"><h3>Your name</h3><div class="namerow"><input class="typ" id="nameEdit" maxlength="24"><button id="nameSave">Save</button></div></div>
+  <p class="foot">Made with rudo by Deon.</p>
+</div></section>
+
+<nav class="bn" id="nav">
+  <button data-v="home" class="on"><svg viewBox="0 0 24 24" fill="currentColor"><path d="M3 11l9-8 9 8v10h-6v-6H9v6H3z"/></svg>Learn</button>
+  <button data-v="profile"><svg viewBox="0 0 24 24" fill="currentColor"><circle cx="12" cy="8" r="4.5"/><path d="M3 21c1-5 5-7 9-7s8 2 9 7z"/></svg>Profile</button>
+</nav>
+
+<section id="lesson" hidden><div class="wrap" style="display:flex;flex-direction:column;flex:1;width:100%">
+  <div class="lt"><button class="x" id="quit" aria-label="Quit lesson">×</button><div class="bar"><i id="lBar" style="width:0"></i></div><span class="stat"><svg><use href="#heart"/></svg><span id="hearts">5</span></span></div>
+  <div class="q" id="q"></div>
+</div>
+<footer id="foot"><div class="wrap"><div id="fb" hidden></div><button class="big" id="chk" disabled>Check</button></div></footer>
+</section>
+
+<div id="toast" hidden role="status"></div>
+<section id="end" hidden><div class="wrap endc" id="endc"></div></section>
+
+<dialog id="nameD"><form id="nameF">
+  <h2>Mhoroi! Welcome</h2>
+  <p>What should we call you?</p>
+  <input class="typ" id="nameI" maxlength="24" autocomplete="given-name" required placeholder="Your name">
+  <p><button class="big" type="submit">Let's start</button></p>
+</form></dialog>
+
+<script>
+{
+const C=[['#ffc72c','#1b1b1b','#c99700'],['#d62828','#fff','#8f1a1a'],['#2b2b2b','#ffc72c','#000']];
+const U=[
+{n:'Greetings',s:'Kukwazisa',tip:"Shona is spelt the way it sounds. Vowels are short and clear: <b>a</b> as in father, <b>e</b> as in bed, <b>i</b> as in see, <b>o</b> as in more, <b>u</b> as in moon. Adding <b>-i</b> (Mhoroi, Makadii) shows respect to an elder or greets a group. In <b>zvakanaka</b>, the <b>zv</b> is a whistled z.",
+w:[['Mhoro','Hello (to a friend)'],['Mhoroi','Hello (respectful, or to a group)'],['Mangwanani','Good morning'],['Masikati','Good afternoon'],['Manheru','Good evening'],['Makadii?','How are you?'],['Ndiripo','I am fine'],['Chisarai','Goodbye (when you leave)'],['Fambai zvakanaka','Go well']],
+x:[['Mangwanani makadii?','Good morning how are you?'],['Ndiripo makadiiwo?','I am fine how are you too?'],['Manheru makadii?','Good evening how are you?'],['Fambai zvakanaka','Go well']]},
+{n:'Basics',s:'Zvekutanga',tip:"Almost every syllable ends in a vowel: Nda-te-nda, Pa-mu-so-roi. The stress usually falls on the second-to-last syllable.",
+w:[['Hongu','Yes'],['Kwete','No'],['Ndatenda','Thank you'],['Ndapota','Please'],['Pamusoroi','Excuse me'],['Ndinonzi','I am called'],['zita','name'],['Ndiani?','Who is it?']],
+x:[['Ndinonzi Andrea','I am called Andrea'],['Zita renyu ndiani?','What is your name?'],['Ndatenda shamwari','Thank you friend'],['Hongu ndatenda','Yes thank you']]},
+{n:'Family',s:'Mhuri',tip:"Elders get the respectful form: <b>amai vangu</b> (my mother) uses <b>vangu</b>. <b>mh</b> is a breathy m, as in <b>mhuri</b>.",
+w:[['mhuri','family'],['amai','mother'],['baba','father'],['mwana','child'],['ambuya','grandmother'],['sekuru','grandfather'],['mukoma','older brother (said by a boy)'],['hanzvadzi','sister (said by a boy)'],['shamwari','friend']],
+x:[['Amai vangu','My mother'],['Baba vangu','My father'],['Uyu ishamwari yangu','This is my friend']]},
+{n:'Numbers',s:'Nhamba',tip:"These are the counting words: potsi, piri, tatu... When you count actual things, the number changes to match the thing. Learn these first.",
+w:[['potsi','one (1)'],['piri','two (2)'],['tatu','three (3)'],['ina','four (4)'],['shanu','five (5)'],['tanhatu','six (6)'],['nomwe','seven (7)'],['sere','eight (8)'],['pfumbamwe','nine (9)'],['gumi','ten (10)']],x:[]},
+{n:'Food',s:'Zvokudya',tip:"<b>ny</b> sounds like the Spanish ñ: <b>nyama</b>. <b>ch</b> is as in church. <b>ne-</b> means with or and: <b>sadza nehuku</b>.",
+w:[['sadza','sadza (maize meal)'],['mvura','water'],['nyama','meat'],['muriwo','greens'],['chingwa','bread'],['mukaka','milk'],['huku','chicken'],['hove','fish'],['zvokudya','food']],
+x:[['Ndine nzara','I am hungry'],['Ndine nyota','I am thirsty'],['Ndinoda sadza nehuku','I want sadza with chicken'],['Ndipeiwo mvura','Please give me water']]},
+{n:'Church',s:'Kereke',tip:"<b>bh</b> is a breathy b: <b>Bhaibheri</b>. God takes the respectful form: <b>Mwari vakuropafadzei</b>.",
+w:[['Mwari','God'],['Ishe','Lord'],['kereke','church'],['Bhaibheri','Bible'],['kunamata','to pray'],['rudo','love'],['rugare','peace'],['mufaro','joy']],
+x:[['Mwari vakuropafadzei','God bless you'],['Ndiri kufara','I am happy'],['Ndiri kuenda kukereke','I am going to church'],['Mwari irudo','God is love']]},
+{n:'Body',s:'Muviri',tip:"Many body words have a singular and a plural: <b>zino</b> (tooth) becomes <b>mazino</b> (teeth), <b>ziso</b> (eye) becomes <b>maziso</b>.",
+w:[['musoro','head'],['maziso','eyes'],['nzeve','ear'],['mhino','nose'],['muromo','mouth'],['mazino','teeth'],['ruoko','hand'],['gumbo','leg'],['mwoyo','heart'],['vhudzi','hair']],
+x:[['Mazino angu akachena','My teeth are clean'],['Musoro wangu uri kurwadza','My head is hurting']]},
+{n:'Days',s:'Mazuva',tip:"Tuesday to Friday are built from numbers: <b>Chipiri</b> (2), <b>Chitatu</b> (3), <b>China</b> (4), <b>Chishanu</b> (5). <b>Svondo</b> comes from Sunday.",
+w:[['Muvhuro','Monday'],['Chipiri','Tuesday'],['Chitatu','Wednesday'],['China','Thursday'],['Chishanu','Friday'],['Mugovera','Saturday'],['Svondo','Sunday'],['nhasi','today'],['mangwana','tomorrow'],['nezuro','yesterday']],
+x:[['Nhasi iMuvhuro','Today is Monday'],['Mangwana iSvondo','Tomorrow is Sunday'],['Tichaonana Chishanu','See you on Friday']]},
+{n:'Weather',s:'Mamiriro ekunze',tip:"<b>Kuno-</b> at the start describes how it is right now: <b>kunotonhora</b> (it is cold), <b>kunopisa</b> (it is hot).",
+w:[['zuva','sun'],['mwedzi','moon'],['makore','clouds'],['mhepo','wind'],['chando','cold weather'],['kunotonhora','it is cold'],['kunopisa','it is hot'],['gore','year']],
+x:[['Nhasi kunotonhora','Today it is cold'],['Mangwana kunopisa','Tomorrow it is hot']]},
+{n:'Home',s:'Kumba',tip:"<b>Ku-</b> in front of a place often means at or to: <b>kumba</b> (at home), <b>kukereke</b> (to church).",
+w:[['imba','house'],['kumba','at home'],['musuwo','door'],['hwindo','window'],['mubhedha','bed'],['tafura','table'],['chigaro','chair'],['kicheni','kitchen']],
+x:[['Ndiri kumba','I am at home'],['Vhura musuwo','Open the door'],['Vhara hwindo','Close the window']]},
+{n:'Animals',s:'Mhuka',tip:"<b>Shumba</b> (lion) and <b>nzou</b> (elephant) are also family totems (mitupo) in Zimbabwe. Ask a Shona friend what theirs is.",
+w:[['imbwa','dog'],['katsi','cat'],['mombe','cow'],['mbudzi','goat'],['shumba','lion'],['nzou','elephant'],['shiri','bird'],['tsoko','monkey']],
+x:[['Ndine imbwa','I have a dog'],['Shumba ihombe','The lion is big']]},
+{n:'Actions',s:'Zviito',tip:"Verbs start with <b>ku-</b> (to): <b>kudya</b> to eat. <b>Ndino-</b> means I do it: <b>ndinodya</b> I eat. <b>Ndiri ku-</b> means I am doing it now.",
+w:[['kudya','to eat'],['kunwa','to drink'],['kurara','to sleep'],['kufamba','to walk'],['kumhanya','to run'],['kutaura','to speak'],['kuverenga','to read'],['kunyora','to write'],['kuimba','to sing']],
+x:[['Ndinoda kuimba','I like to sing'],['Ndiri kuverenga bhuku','I am reading a book'],['Ndinotaura chiShona','I speak Shona']]},
+{n:'Feelings',s:'Manzwiro',tip:"Many feelings start with <b>Nda-</b>, which means it has happened to me: <b>ndaneta</b> I am tired, literally I have become tired.",
+w:[['ndafara','I am happy'],['ndaneta','I am tired'],['ndine hasha','I am angry'],['ndinotya','I am afraid'],['ndarwara','I am sick'],['ndanyara','I am shy'],['ndasuwa','I miss you']],
+x:[['Ndaneta zvikuru','I am very tired'],['Ndinokuda','I love you']]},
+{n:'Questions',s:'Mibvunzo',tip:"Question words often come at the end: <b>Uri kupi?</b> is literally You are where?",
+w:[['Chii?','What?'],['Ani?','Who?'],['Kupi?','Where?'],['Rini?','When?'],['Sei?','Why?'],['Marii?','How much?'],['Mangani?','How many?']],
+x:[['Uri kupi?','Where are you?'],['Iyi imarii?','How much is this?'],['Chii ichi?','What is this?']]},
+{n:'Places',s:'Nzvimbo',tip:"Add <b>ku-</b> to say where you are going: <b>kuchitoro</b> to the shop, <b>kuchikoro</b> to school.",
+w:[['chikoro','school'],['chipatara','hospital'],['chitoro','shop'],['musika','market'],['taundi','town'],['mugwagwa','road'],['basa','work']],
+x:[['Ndiri kuenda kuchitoro','I am going to the shop'],['Ndiri kubasa','I am at work']]},
+{n:'Clothes',s:'Zvipfeko',tip:"Lots of clothes words are borrowed from English and spelt the Shona way: <b>juzi</b> (jersey), <b>sokisi</b> (socks).",
+w:[['hembe','shirt'],['bhurukwa','trousers'],['shangu','shoes'],['ngowani','hat'],['juzi','jumper'],['sokisi','socks'],['rokwe','dress']],
+x:[['Pfeka juzi','Wear a jumper'],['Kunotonhora pfeka juzi','It is cold wear a jumper']]},
+{n:'Everyday phrases',s:'Mitsara',tip:"These help you keep a conversation going. Don't be shy to say <b>Handinzwisisi</b>: Shona speakers love it when you try.",
+w:[['Handizivi','I don’t know'],['Ndinonzwisisa','I understand'],['Handinzwisisi','I don’t understand'],['Zvakanaka','Good / okay'],['Hazvina basa','No problem'],['Ndiregerei','Sorry'],['Ndiri kuuya','I am coming'],['zvishoma','a little']],
+x:[['Ndinodzidza chiShona','I am learning Shona'],['Ndinogara kuGlenrothes','I live in Glenrothes'],['Taura zvishoma nezvishoma','Speak slowly']]}
+];
+U.forEach(u=>u.sec=1);
+[
+{n:'Introduce yourself',s:'Kuzivisa',tip:"Shona builds sentences from small pieces: <b>Ndi-</b> (I) + <b>-no-</b> (do it regularly) + verb. So <b>ndinogara</b> = I live, <b>ndinobva</b> = I come from.",
+w:[['Ndinonzi Deon','I am called Deon'],['Unonzi ani?','What is your name?'],['Ndinobva kuZimbabwe','I come from Zimbabwe'],['Ndinogara kuScotland','I live in Scotland'],['Ndiri mudzidzi','I am a student'],['Ndinoshanda kuchipatara','I work at the hospital'],['Ndine makore makumi maviri','I am twenty years old'],['Ndafara kukuziva','Nice to meet you']]},
+{n:'Chat with a friend',s:'Kukurukura',tip:"With friends, drop the respectful <b>-i</b>: <b>Wakadii?</b> instead of <b>Makadii?</b> Adding <b>-wo</b> means too: <b>wakadiiwo?</b> and you?",
+w:[['Wakadii?','How are you? (to a friend)'],['Ndiripo, wakadiiwo?','I am fine, and you?'],['Ndiri kufara kukuona','I am happy to see you'],['Uri kuitei?','What are you doing?'],['Handisi kuita chinhu','I am not doing anything'],['Tichaonana mangwana','See you tomorrow'],['Ndichakufonera','I will call you'],['Famba zvakanaka','Go well (to a friend)']]},
+{n:'At church',s:'Pakereke',tip:"<b>Ngati-</b> + verb + <b>-i</b> means let us: <b>ngatinamatei</b> let us pray, <b>ngatiimbei</b> let us sing.",
+w:[['Mangwanani, hama dzangu','Good morning, my brothers and sisters'],['Ngatinamatei','Let us pray'],['Ngatiimbei','Let us sing'],['Jehovha ndiye mufudzi wangu','The Lord is my shepherd'],['Mwari vakanaka','God is good'],['Verenga Bhaibheri','Read the Bible'],['Tinokutendai Ishe','We thank you Lord'],['Mwari vakuropafadzei','God bless you']]},
+{n:'At the shop',s:'Kuchitoro',tip:"Add <b>here</b> to the end of a sentence to make it a yes/no question: <b>Mune mazai here?</b> Do you have eggs?",
+w:[['Ndinoda kutenga chingwa','I want to buy bread'],['Iyi imarii?','How much is this?'],['Zvinodhura','It is expensive'],['Mune mazai here?','Do you have eggs?'],['Ndinoda maviri','I want two'],['Ndipeiwo mukaka','Please give me milk'],['Ndine mari','I have money'],['Ndatenda, chisarai','Thank you, goodbye']]},
+{n:'At home',s:'Kumba',tip:"Morning at home: <b>Mamuka sei?</b> (how did you wake up?) and the answer <b>Tamuka, mamukawo?</b> (we woke well, and you?).",
+w:[['Mamuka sei?','How did you wake up?'],['Tamuka, mamukawo?','We woke well, and you?'],['Ndiri kubika sadza','I am cooking sadza'],['Uyai tidye','Come, let us eat'],['Ndine nzara chaizvo','I am really hungry'],['Geza ndiro','Wash the dishes'],['Ndiri kuenda kunorara','I am going to sleep'],['Murare zvakanaka','Sleep well']]},
+{n:'Make plans',s:'Zvirongwa',tip:"<b>Ndicha-</b> means I will: <b>ndichauya</b> I will come. <b>Tichasangana</b> we will meet.",
+w:[['Uri kuenda kupi?','Where are you going?'],['Ndiri kuenda kutaundi','I am going to town'],['Tichasangana nguva ipi?','What time shall we meet?'],['Ndichauya Svondo','I will come on Sunday'],['Ngatiendei pamwe chete','Let us go together'],['Unoda kutamba squash here?','Do you want to play squash?'],['Hongu, ndinoda','Yes, I would like to'],['Handikwanise nhasi','I can’t today']]},
+{n:'Get help',s:'Rubatsiro',tip:"<b>Ndi-...-ei</b> asks politely for something for me: <b>ndibatsirei</b> help me, <b>ndipeiwo</b> please give me.",
+w:[['Ndibatsirei','Please help me'],['Ndiri kurwara','I am sick'],['Ndiri kurwadziwa nemusoro','I have a headache'],['Chipatara chiri kupi?','Where is the hospital?'],['Ndinoda chiremba','I need a doctor'],['Mazino angu ari kurwadza','My teeth are hurting'],['Ndanzwa','I understand'],['Ndatenda nerubatsiro','Thank you for the help']]}
+].forEach(u=>{u.x=u.w;u.sec=2;u.sent=true;U.push(u)});
+
+const G=['Greet people','Say the basics','Talk about your family','Count to ten','Order food and drink','Talk about church','Name parts of the body','Talk about the days','Describe the weather','Talk about your home','Name animals','Say what you do','Share how you feel','Ask questions','Get around town','Talk about clothes','Keep a chat going'];
+U.forEach((u,i)=>{u.c=C[i%3][0];u.f=C[i%3][1];u.d=C[i%3][2];u.g=G[i]||u.n});
+const DICT={ndinoda:'I want / I like',ndiri:'I am',ndine:'I have',ndinobva:'I come from',ndinogara:'I live',ndinoshanda:'I work',kuenda:'to go',kutenga:'to buy',kubika:'to cook',kutamba:'to play',here:'question word (yes/no?)',uri:'you are',mudzidzi:'student',makore:'years',makumi:'tens',maviri:'two',kukuziva:'to know you',kukuona:'to see you',chinhu:'a thing',tichaonana:'we will see each other',hama:'relatives / brethren',dzangu:'my',wangu:'my',angu:'my',ndiye:'is the one',mufudzi:'shepherd',jehovha:'the Lord',tinokutendai:'we thank you',vakanaka:'are good',verenga:'read',mune:'do you have',mazai:'eggs',mari:'money',chisarai:'goodbye',chaizvo:'really',geza:'wash',ndiro:'dishes',kunorara:'to go and sleep',kupi:'where',kutaundi:'to town',nguva:'time',ipi:'which',pamwe:'together',chete:'only',nhasi:'today',chiremba:'doctor',nemusoro:'in the head',ari:'are',kurwadza:'hurting',nerubatsiro:'for the help',kufara:'being happy',kuitei:'doing what',kuchipatara:'at the hospital',kuzimbabwe:'to/from Zimbabwe',kuscotland:'in Scotland',tidye:'let us eat',uyai:'come'};
+U.forEach(u=>u.sent||u.w.forEach(w=>DICT[w[0].toLowerCase().replace('?','')]=w[1]));
+const NODES=[['learnA','star','Lesson'],['learnB','star','Lesson'],['review','repeat','Practice'],['phrases','book','Phrases'],['rush','bolt','Match rush'],['spell','pen','Spelling'],['trophy','trophy','Unit review']];
+const ICON={star:'<path d="M12 3l2.7 5.6 6.1.9-4.4 4.3 1 6.1L12 17l-5.4 2.9 1-6.1L3.2 9.5l6.1-.9z"/>',repeat:'<path d="M4 9a6 6 0 0 1 10-4l2 2M16 3v4h-4M20 15a6 6 0 0 1-10 4l-2-2M8 21v-4h4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round"/>',book:'<path d="M3 5c3-1 6-1 9 1v14c-3-2-6-2-9-1zM21 5c-3-1-6-1-9 1v14c3-2 6-2 9-1z"/>',bolt:'<path d="M13 2L4 14h7l-1 8 9-12h-7z"/>',pen:'<path d="M4 20l1-5L16 4l4 4L9 19zM14 6l4 4" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linejoin="round"/>',trophy:'<path d="M7 3h10v5a5 5 0 0 1-10 0zM7 5H3c0 4 2 5 4 5M17 5h4c0 4-2 5-4 5M10 14h4v3h3v3H7v-3h3z"/>',chest:'<path d="M3 9a3 3 0 0 1 3-3h12a3 3 0 0 1 3 3v2H3zM3 12h18v7H3z"/><rect x="10" y="10" width="4" height="4" rx="1" fill="#fff"/>',lock:'<path d="M5.8 5.1C6.3 3.6 7.8 2.5 9.3 2.7C10.7 2.9 11.4 4 11.2 5.5L11 7.1C13.5 8.3 14.9 10.4 15.3 12.6L17.2 15.3L12.5 14.8L11.8 15.6H11.6V20.2H12.9V21.6H7.9V20.2H9.2V15.6H9.5C8.5 13.6 8.3 11.1 8.7 8.7L8.5 7.3C7.6 6.9 7.1 6.6 7.3 5.6Z"/><path d="M9.2 17l1.2 1 1.2-1M9.2 18.6l1.2 1 1.2-1" stroke="var(--line)" stroke-width=".6" fill="none"/><circle cx="9.4" cy="4.6" r=".6" fill="var(--line)"/>'};
+const ic=(k,c)=>`<svg viewBox="0 0 24 24" width="34" height="34" fill="${c||'currentColor'}" aria-hidden="true">${ICON[k]}</svg>`;
+const KEY='dzidza-shona-v2',URL='https://deondzu.github.io/dzidza-shona/';
+let S={name:'',xp:0,streak:0,last:'',done:{},day:'',dayXp:0,mode:'en',theme:'light'};
+try{const old=localStorage.getItem('dzidza-shona-v1');const r=localStorage.getItem(KEY)||old;if(r){const o=JSON.parse(r);if(!localStorage.getItem(KEY))o.done={};S=Object.assign(S,o)}}catch(e){}
+if(!S.v3){const nd={};for(const k in S.done){const[a,b]=k.split('-').map(Number);if(b<3)nd[a+'-'+b]=1;else if(b>3)nd[a+'-'+(b-1)]=1}S.done=nd;S.v3=1;try{localStorage.setItem('dzidza-shona-v2',JSON.stringify(S))}catch(e){}}
+const save=()=>{try{localStorage.setItem(KEY,JSON.stringify(S))}catch(e){}};
+const $=id=>document.getElementById(id);
+const day=o=>new Date(Date.now()-o*864e5).toISOString().slice(0,10);
+const mix=a=>{a=a.slice();for(let i=a.length-1;i>0;i--){const j=Math.random()*(i+1)|0;[a[i],a[j]]=[a[j],a[i]]}return a};
+const pick=a=>a[Math.random()*a.length|0];
+const norm=t=>t.toLowerCase().replace(/[?!.,'’"]/g,'').replace(/\s+/g,' ').trim();
+const toks=t=>t.replace(/[?!.,]/g,'').split(' ');
+const gloss=t=>t.split(' ').map(w=>{const k=w.toLowerCase().replace(/[?!.,]/g,'');return DICT[k]?`<span class="hw" tabindex="0" data-h="${DICT[k]}">${w}</span>`:w}).join(' ');
+function level(xp){let n=1,need=50,rest=xp;while(rest>=need){rest-=need;n++;need+=20}return{n,rest,need}}
+function current(){for(let ui=0;ui<U.length;ui++)for(let k=0;k<NODES.length;k++)if(!S.done[ui+'-'+k])return{ui,k};return{ui:U.length-1,k:NODES.length-1}}
+function show(v){for(const id of ['home','profile','lesson','end'])$(id).hidden=id!==v;$('nav').hidden=!(v==='home'||v==='profile');document.querySelector('.top').hidden=!(v==='home'||v==='profile');$('nav').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.v===v));if(v==='profile')renderProfile();window.scrollTo(0,0)}
+function applyTheme(){const r=document.documentElement;if(S.theme==='auto')delete r.dataset.mode;else r.dataset.mode=S.theme||'light'}
+$('nav').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;if(b.dataset.v==='home'){renderHome();show('home')}else show('profile')});
+$('theme').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.theme=b.dataset.t;save();applyTheme();renderProfile()});
+$('nameSave').addEventListener('click',()=>{const v=$('nameEdit').value.trim();if(!v)return;S.name=v.slice(0,24);save();renderProfile();toast('Name saved')});
+function renderProfile(){
+  if(S.day!==day(0)){S.day=day(0);S.dayXp=0}
+  const lv=level(S.xp),cur=current();
+  $('hello').textContent=S.name?`Mhoro, ${S.name}!`:'Mhoro!';$('nameEdit').value=S.name||'';
+  $('gTxt').textContent=`${Math.min(S.dayXp,20)} / 20 XP`;$('gBar').style.width=Math.min(100,S.dayXp*5)+'%';
+  $('lvTxt').textContent=`Level ${lv.n}`;$('lvSub').textContent=`${lv.rest} / ${lv.need} XP to level ${lv.n+1} · Section ${U[cur.ui].sec}, Unit ${cur.ui+1}: ${U[cur.ui].n}`;$('lvBar').style.width=(lv.rest/lv.need*100)+'%';
+  $('seg').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.m===S.mode));
+  $('theme').querySelectorAll('button').forEach(b=>b.classList.toggle('on',b.dataset.t===(S.theme||'light')));
+}
+
+function renderHome(){
+  if(S.day!==day(0)){S.day=day(0);S.dayXp=0}
+  const st=(S.last===day(0)||S.last===day(1))?S.streak:0,lv=level(S.xp),cur=current();
+  $('sStreak').textContent=st;$('sXp').textContent=S.xp;$('sLv').textContent='Lv '+lv.n;
+  let prev=true,html='';const off=[0,48,76,48,0,-48,-76];
+  U.forEach((u,ui)=>{
+    if(ui===0||U[ui-1].sec!==u.sec)html+=`<div class="sec">Section ${u.sec} · ${u.sec===1?'Words and basics':'Sentences and conversations'}</div>`;
+    html+=`<section class="usec"><div class="unit" style="background:${u.c};color:${u.f};box-shadow:0 5px 0 ${u.d}"><div><small>Unit ${ui+1} · ${u.n} · ${u.s}</small><h2>${u.g}</h2></div><button class="tipb" data-tip="${ui}" aria-label="Tips for unit ${ui+1}">Tips</button></div><div class="tip" id="tip${ui}" hidden>${u.tip}</div><div class="path">`;
+    NODES.forEach((nd,k)=>{
+      const key=ui+'-'+k,d=!!S.done[key],st=d?'done':prev?'open':'locked',isCur=st==='open';prev=d;
+      const bg=st==='locked'?'':nd[0]==='chest'?'transparent':u.c,fg=nd[0]==='chest'?(st==='locked'?'':'#b87a00'):u.f;
+      html+=`<div class="nwrap" style="transform:translateX(${off[(ui*NODES.length+k)%7]}px)">${isCur?`<span class="start">${nd[0]==='chest'?'Open':'Start'}</span>`:''}<button class="node ${st} ${nd[0]==='chest'?'chest':''} ${isCur?'cur':''}" style="--c:${bg};--d:${u.d};color:${fg}" data-u="${ui}" data-k="${k}" aria-label="${u.n}: ${nd[2]}${d?', done':st==='locked'?', locked':''}">${ic(st==='locked'?'lock':nd[1])}</button><span class="nlab">${nd[2]}</span></div>`;
+    });
+    html+='</div></section>';
+  });
+  $('path').innerHTML=html;
+  const c=$('path').querySelector('.node.cur');if(c&&!renderHome.did){renderHome.did=1;setTimeout(()=>c.scrollIntoView({block:'center'}),50)}
+}
+$('path').addEventListener('click',e=>{
+  const t=e.target.closest('[data-tip]');if(t){const el=$('tip'+t.dataset.tip);el.hidden=!el.hidden;return}
+  const n=e.target.closest('.node');if(!n||n.classList.contains('locked'))return;
+  const ui=+n.dataset.u,k=+n.dataset.k;
+  if(NODES[k][0]==='chest'){if(S.done[ui+'-'+k])return;const g=10+(Math.random()*11|0);award(g);S.done[ui+'-'+k]=true;save();renderHome();toast(`Treasure! +${g} XP`);return}
+  start(ui,k);
+});
+$('seg').addEventListener('click',e=>{const b=e.target.closest('button');if(!b)return;S.mode=b.dataset.m;save();renderProfile()});
+$('share').addEventListener('click',async()=>{
+  const lv=level(S.xp),cur=current(),st=(S.last===day(0)||S.last===day(1))?S.streak:0;
+  const txt=`${S.name||'I'} ${S.name?'is':'am'} on Level ${lv.n} in Dzidza Shona, Unit ${cur.ui+1} (${U[cur.ui].n}), with a ${st}-day streak. Where are you up to? ${URL}`;
+  try{await navigator.clipboard.writeText(txt);toast('Copied! Paste it in your group chat')}catch(e){$('shareTxt').hidden=false;$('shareTxt').value=txt;$('shareTxt').select();toast('Copy the text below')}
+});
+function toast(m){const t=$('toast');t.textContent=m;t.hidden=false;clearTimeout(toast.t);toast.t=setTimeout(()=>t.hidden=true,2600)}
+function award(xp){if(S.day!==day(0)){S.day=day(0);S.dayXp=0}if(S.last!==day(0)){S.streak=S.last===day(1)?S.streak+1:1;S.last=day(0)}S.xp+=xp;S.dayXp+=xp}
+
+function mc(u,set,dir){const w=pick(set),o=mix(u.w.filter(x=>x!==w)).slice(0,3),all=mix([w,...o]);
+  return dir?{t:'mc',p:`What does <b>${gloss(w[0])}</b> mean?`,a:w[1],o:all.map(x=>x[1]),clue:`It starts with “${w[1][0]}”`}
+            :{t:'mc',p:`Which ${u.sent?'sentence':'word'} means <b>${w[1]}</b>?`,a:w[0],o:all.map(x=>x[0]),clue:`It starts with “${w[0][0]}”`}}
+function typ(set){const w=pick(set);return{t:'type',p:`Type this in Shona: <b>${w[1]}</b>`,a:w[0]}}
+function build(u,sh,list){const s=pick(list&&list.length?list:u.x),ans=sh?s[0]:s[1],src=sh?0:1,mine=toks(ans).map(x=>x.toLowerCase());
+  let pool=u.x.filter(z=>z!==s).flatMap(z=>toks(z[src]));if(sh&&!u.sent)pool=pool.concat(u.w.map(w=>w[0].replace('?','')));else pool=pool.concat(['the','is','my','a','you']);
+  const extra=mix([...new Set(pool.filter(p=>!mine.includes(p.toLowerCase())))]).slice(0,3);
+  return{t:'build',p:sh?`Write this in Shona: <b>${s[1]}</b>`:`Translate: <b>${gloss(s[0])}</b>`,a:ans,o:mix(toks(ans).concat(extra))}}
+function match(u,set){const p=mix(set).slice(0,5);return{t:'match',pairs:p.length<5?p.concat(mix(u.w.filter(w=>!p.includes(w))).slice(0,5-p.length)):p}}
+
+let L;
+function start(ui,k){
+  const u=U[ui],has=u.x.length>0,h=Math.ceil(u.w.length/2),kind=NODES[k][0],en=S.mode==='en';
+  const set=kind==='learnA'?u.w.slice(0,h):kind==='learnB'?u.w.slice(h):u.w;
+  const E=en?'e2s':'s2e',B=has?(en?'bsh':'ben'):'type';
+  const P={learnA:['e2s','e2s',E,'match','e2s','type','e2s','type'],learnB:['e2s','e2s',E,'match','e2s','type','e2s','type'],
+    review:['e2s',E,'match','e2s',has?'bsh':'type','e2s',B,'type','e2s','type'],
+    phrases:has?['bsh','bsh',B,'e2s','bsh',B,'bsh','type']:['e2s','type','e2s','type','match','e2s','type','e2s'],
+    rush:['match','match','match','match'],spell:['type','type','e2s','type','type',E,'type','type'],
+    trophy:['e2s',E,'match','type',has?'bsh':'e2s','e2s',B,'type','match','e2s',has?'bsh':'type','type']}[kind];
+  const PS={learnA:['e2s','bsh','e2s','bsh','match',B,'e2s','bsh'],learnB:['e2s','bsh','e2s','bsh','match',B,'e2s','bsh'],
+    review:['bsh',E,'bsh','match','e2s',B,'bsh','e2s'],phrases:['bsh','bsh',B,'bsh',B,'bsh','e2s','bsh'],
+    rush:['match','match','match'],spell:['bsh','type','bsh','type','bsh','type'],
+    trophy:['bsh','e2s',B,'match','bsh',E,'type','bsh','e2s','bsh']};
+  const PL=u.sent?PS[kind]:P;
+  const items=PL.map(p=>p==='s2e'?mc(u,set,1):p==='e2s'?mc(u,set,0):p==='match'?match(u,set):p==='bsh'?build(u,1,u.sent?set:u.x):p==='ben'?build(u,0,u.sent?set:u.x):typ(set));
+  if(kind==='learnA'||kind==='learnB')items.unshift({t:'learn',words:set});
+  L={ui,k,items,i:0,hearts:kind==='trophy'?3:5,n:items.filter(x=>x.t!=='learn').length,ok:0,miss:0,clues:0};show('lesson');renderQ();
+}
+function setFoot(state,msg,sub){const f=$('foot');f.className=state||'';const fb=$('fb');fb.hidden=!msg;fb.innerHTML=msg?msg+(sub?`<span>${sub}</span>`:''):'';$('chk').textContent=state?'Continue':'Check';L.state=state?'next':'check'}
+function renderQ(){
+  const it=L.items[L.i];L.sel=it.t==='build'?[]:null;L.hl=0;L.cl=0;
+  $('lBar').style.width=(L.ok/L.n*100)+'%';$('hearts').textContent=L.hearts;setFoot('','');$('chk').disabled=true;$('chk').hidden=it.t==='match';
+  const hb='<button class="hint" id="hb">Clue</button>';
+  let h='';
+  if(it.t==='learn'){h=`<h3>New words</h3><p class="small">Read these first. In questions, tap any dotted word to see what it means.</p><div class="learn">${it.words.map(w=>`<div class="lc"><b>${w[0]}</b><span>${w[1]}</span></div>`).join('')}</div>`;$('chk').disabled=false;$('chk').textContent='Got it'}
+  if(it.t==='mc')h=`<div class="qh"><h3>${it.p}</h3>${hb}</div><div id="clue"></div><div class="opts">${it.o.map(o=>`<button class="opt" data-v="${o}">${o}</button>`).join('')}</div>`;
+  if(it.t==='type')h=`<div class="qh"><h3>${it.p}</h3>${hb}</div><div id="clue"></div><input class="typ" id="ti" autocomplete="off" autocapitalize="off" spellcheck="false" placeholder="Type in Shona">`;
+  if(it.t==='build')h=`<div class="qh"><h3>${it.p}</h3>${hb}</div><div id="clue"></div><div class="ans" id="ans"></div><div class="bank" id="bank">${it.o.map((o,i)=>`<button class="tok" data-i="${i}">${o}</button>`).join('')}</div>`;
+  if(it.t==='match'){L.m={l:null,r:null,done:0};const R=mix(it.pairs);
+    h=`<div class="qh"><h3>Tap the matching pairs</h3>${hb}</div><div id="clue"></div><div class="match"><div>${it.pairs.map((p,i)=>`<button class="mbtn" data-s="l" data-k="${i}">${p[0]}</button>`).join('')}</div><div>${R.map(p=>`<button class="mbtn" data-s="r" data-k="${it.pairs.indexOf(p)}">${p[1]}</button>`).join('')}</div></div>`}
+  $('q').innerHTML=h;
+  const ti=$('ti');if(ti){ti.focus();ti.addEventListener('input',()=>{L.sel=ti.value;$('chk').disabled=!ti.value.trim()});ti.addEventListener('keydown',e=>{if(e.key==='Enter'&&ti.value.trim())act()})}
+}
+function clue(){
+  const it=L.items[L.i],q=$('q'),c=$('clue');L.clues++;L.cl++;
+  if(it.t==='mc'){
+    if(L.cl===1&&it.clue){c.innerHTML=`<p class="clue">${it.clue}</p>`;return}
+    const left=[...q.querySelectorAll('.opt:not(.out)')].filter(b=>b.dataset.v!==it.a);
+    if(left.length>1){const b=pick(left);b.classList.add('out');if(b.classList.contains('sel')){b.classList.remove('sel');L.sel=null;$('chk').disabled=true}}
+    c.innerHTML='<p class="clue">One wrong answer is crossed out.</p>';if(left.length<=2)$('hb').disabled=true;
+  }
+  if(it.t==='type'){L.hl=Math.min(it.a.length,L.hl+1);const ti=$('ti');ti.value=it.a.slice(0,L.hl);L.sel=ti.value;$('chk').disabled=false;ti.focus();
+    c.innerHTML=`<p class="clue">${it.a.length} letters. Next letter added for you.</p>`;if(L.hl>=it.a.length)$('hb').disabled=true}
+  if(it.t==='build'){const need=toks(it.a),got=L.sel.map(i=>it.o[i]);
+    if(got.some((g,i)=>g!==need[i])){c.innerHTML='<p class="clue">Something in your answer is out of place. Tap a word to take it back.</p>';return}
+    const w=need[got.length];const b=[...q.querySelectorAll('#bank .tok:not(.used)')].find(x=>x.textContent===w);
+    q.querySelectorAll('.glow').forEach(x=>x.classList.remove('glow'));if(b)b.classList.add('glow');
+    c.innerHTML=`<p class="clue">The next word is glowing. ${need.length} words in total.</p>`}
+  if(it.t==='match'){const l=[...q.querySelectorAll('.mbtn[data-s="l"]:not(.gone)')][0];if(!l)return;
+    q.querySelectorAll('.glow').forEach(x=>x.classList.remove('glow'));l.classList.add('glow');q.querySelector(`.mbtn[data-s="r"][data-k="${l.dataset.k}"]`).classList.add('glow');
+    c.innerHTML='<p class="clue">These two go together.</p>'}
+}
+$('q').addEventListener('click',e=>{
+  const hw=e.target.closest('.hw');if(hw){const on=hw.classList.contains('on');$('q').querySelectorAll('.hw.on').forEach(x=>x.classList.remove('on'));if(!on)hw.classList.add('on');return}
+  if(e.target.id==='hb'&&L.state!=='next')return clue();
+  if(L.state==='next')return;const it=L.items[L.i];
+  const o=e.target.closest('.opt');if(o){$('q').querySelectorAll('.opt').forEach(b=>b.classList.toggle('sel',b===o));L.sel=o.dataset.v;$('chk').disabled=false;return}
+  const t=e.target.closest('.tok');if(t){const i=+t.dataset.i;t.classList.remove('glow');
+    if(t.parentNode.id==='bank'){t.classList.add('used');L.sel.push(i);const c=document.createElement('button');c.className='tok';c.dataset.i=i;c.textContent=it.o[i];$('ans').appendChild(c)}
+    else{L.sel.splice(L.sel.indexOf(i),1);t.remove();$('bank').querySelector(`[data-i="${i}"]`).classList.remove('used')}
+    $('chk').disabled=!L.sel.length;return}
+  const m=e.target.closest('.mbtn');if(m){const s=m.dataset.s;$('q').querySelectorAll(`.mbtn[data-s="${s}"]`).forEach(b=>b.classList.remove('sel'));m.classList.add('sel');L.m[s]=m;
+    if(L.m.l&&L.m.r){const a=L.m.l,b=L.m.r;L.m.l=L.m.r=null;a.classList.remove('sel','glow');b.classList.remove('sel','glow');
+      if(a.dataset.k===b.dataset.k){a.classList.add('gone');b.classList.add('gone');if(++L.m.done===it.pairs.length){L.ok++;$('lBar').style.width=(L.ok/L.n*100)+'%';$('chk').hidden=false;$('chk').disabled=false;$('hb').disabled=true;setFoot('ok','Wagona! All matched')}}
+      else{L.miss++;[a,b].forEach(x=>{x.classList.remove('wrong');void x.offsetWidth;x.classList.add('wrong')})}}}
+});
+function act(){
+  const it=L.items[L.i];
+  if(it.t==='learn')return next();
+  if(L.state==='next')return next();
+  let got='';
+  if(it.t==='mc')got=L.sel;else if(it.t==='type')got=L.sel||'';else if(it.t==='build')got=L.sel.map(i=>it.o[i]).join(' ');
+  const ok=norm(got||'')===norm(it.a);
+  if(ok){L.ok++;$('lBar').style.width=(L.ok/L.n*100)+'%';setFoot('ok',pick(['Zvakanaka! Correct','Great job!','Shasha! Well done','Nice one!']))}
+  else{L.hearts--;L.miss++;$('hearts').textContent=L.hearts;L.items.push(it.t==='mc'?Object.assign({},it,{o:mix(it.o)}):it);setFoot('bad','Not quite','Correct answer: '+it.a)}
+  const hb=$('hb');if(hb)hb.disabled=true;$('chk').disabled=false;$('chk').focus();
+}
+$('chk').addEventListener('click',act);
+function next(){if(L.hearts<=0)return finish(false);L.i++;if(L.i>=L.items.length)return finish(true);renderQ()}
+function finish(win){
+  const u=U[L.ui],nd=NODES[L.k];let h;
+  if(win){const before=level(S.xp).n,xp=(nd[0]==='trophy'?20:10)+L.hearts,acc=Math.max(0,Math.round(100*(L.n-L.miss)/L.n));
+    award(xp);S.done[L.ui+'-'+L.k]=true;save();const lv=level(S.xp);
+    h=`<h2>${nd[0]==='trophy'?'Unit complete!':'Lesson complete!'}</h2>${lv.n>before?`<p class="lvup">Level up! You're now level ${lv.n}</p>`:''}<p>${u.n} · ${nd[2]}. Ndatenda for practising, ${S.name||'shamwari'}.</p><div class="cards"><div class="card">XP earned<b>+${xp}</b></div><div class="card">Accuracy<b>${acc}%</b></div><div class="card">Day streak<b>${S.streak}</b></div><div class="card">Level<b>${lv.n}</b></div></div><button class="big" id="cont">Continue</button>`;
+  }else h=`<h2>Out of hearts</h2><p>No stress, mistakes are how you learn. Use the Clue button if you get stuck, then have another go.</p><button class="big" id="retry">Try again</button><button class="big" id="cont" style="background:var(--line);color:var(--ink);box-shadow:none">Back to path</button>`;
+  $('endc').innerHTML=h;show('end');
+}
+$('endc').addEventListener('click',e=>{if(e.target.id==='cont'){renderHome();show('home')}if(e.target.id==='retry')start(L.ui,L.k)});
+$('quit').addEventListener('click',()=>{renderHome();show('home')});
+$('nameF').addEventListener('submit',e=>{e.preventDefault();const v=$('nameI').value.trim();if(!v)return;S.name=v.slice(0,24);save();$('nameD').close();renderHome()});
+applyTheme();renderHome();show('home');
+if(!S.name){try{$('nameD').showModal()}catch(e){}}
+}
+</script>
+</body>
+</html>

@@ -1,0 +1,14 @@
+{
+  "name": "Dzidza Shona",
+  "short_name": "Dzidza Shona",
+  "description": "Learn Shona, Zimbabwe's most spoken language, a few minutes a day.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#ffffff",
+  "theme_color": "#ffc72c",
+  "icons": [
+    {"src": "icon-192.png", "sizes": "192x192", "type": "image/png", "purpose": "any maskable"},
+    {"src": "icon-512.png", "sizes": "512x512", "type": "image/png", "purpose": "any maskable"}
+  ]
+}
